@@ -8,20 +8,28 @@ import com.myapp.repository.RelationshipRepository;
 import com.myapp.repository.UserCustomRepository;
 import com.myapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service("userService")
-public class UserServiceImpl implements UserService {
+@Transactional(propagation=Propagation.SUPPORTS, readOnly=true)
+public class UserServiceImpl implements UserService, UserDetailsService, SocialUserDetailsService {
 
     private final UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
     private final UserCustomRepository userCustomRepository;
     private final RelationshipRepository relationshipRepository;
     private final SecurityContextService securityContextService;
@@ -30,11 +38,12 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(UserRepository userRepository,
                            UserCustomRepository userCustomRepository,
                            RelationshipRepository relationshipRepository,
-                           SecurityContextService securityContextService) {
+                           SecurityContextService securityContextService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userCustomRepository = userCustomRepository;
         this.relationshipRepository = relationshipRepository;
         this.securityContextService = securityContextService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -75,6 +84,7 @@ public class UserServiceImpl implements UserService {
                 .id(u.getId())
                 .name(u.getName())
                 .avatarHash(Utils.md5(u.getUsername()))
+                .email(u.getUsername())
                 .build()
         );
     }
@@ -100,11 +110,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    @Transactional(propagation= Propagation.REQUIRED, readOnly=false)
+    public User signup(UserParams signupForm) {
+        final User user = new User();
+        user.setUsername(signupForm.getEmail().get());
+        user.setName(signupForm.getName().get());
+        user.setPassword(signupForm.getEncodedPassword().get());
+        userRepository.save(user);
+        return user;
+    }
+
+    @Override
+    @Transactional(propagation=Propagation.REQUIRED, readOnly=false)
+    public void update(long userId, UserEditForm userEditForm) {
+
+        User user = userRepository.findOne(userId);
+        user.setName(userEditForm.getName());
+        userRepository.save(user);
+
+    }
+
+    @Override
+    public SocialUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         final Optional<User> user = userRepository.findOneByUsername(username);
         final AccountStatusUserDetailsChecker detailsChecker = new AccountStatusUserDetailsChecker();
         user.ifPresent(detailsChecker::check);
         return user.orElseThrow(() -> new UsernameNotFoundException("user not found."));
     }
 
+    @Override
+    public SocialUserDetails loadUserByUserId(String userId)
+            throws UsernameNotFoundException, DataAccessException {
+        return loadUserByUsername(userId);
+    }
 }

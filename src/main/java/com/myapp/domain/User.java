@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.security.SocialUserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,8 +19,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
-@ToString
-public class User implements UserDetails {
+public class User implements SocialUserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -99,5 +99,11 @@ public class User implements UserDetails {
     @JsonIgnore
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public String getUserId() {
+        return getUsername();
     }
 }

@@ -5,4 +5,5 @@
     <logger name="jdbc.sqltiming" level="DEBUG"/>
     <logger name="jdbc.resultsettable" level="DEBUG"/>
     <logger name="com.myapp" level="DEBUG"/>
+    <logger name="org.springframework" level="DEBUG"/>
 </configuration>

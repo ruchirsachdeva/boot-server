@@ -4,6 +4,7 @@ import com.myapp.domain.User;
 import com.myapp.dto.ErrorResponse;
 import com.myapp.dto.UserDTO;
 import com.myapp.dto.UserParams;
+import com.myapp.service.SocialUserService;
 import com.myapp.service.UserService;
 import com.myapp.service.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.annotation.Nullable;
 import javax.validation.Valid;
@@ -25,6 +28,11 @@ public class UserController {
     private static final Integer DEFAULT_PAGE_SIZE = 5;
 
     private final UserService userService;
+    @Autowired
+    private ProviderSignInUtils providerSignInUtils;
+
+    @Autowired
+    private SocialUserService socialUserService;
 
     @Autowired
     public UserController(UserService userService) {
@@ -41,8 +49,14 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public User create(@Valid @RequestBody UserParams params) {
-        return userService.create(params);
+    public User create(@Valid @RequestBody UserParams params, WebRequest request) {
+        User user = userService.create(params);
+        //providerSignInUtils.doPostSignUp(user.getUsername(), request);
+
+        socialUserService.postUserSignUp(params.getToken());
+
+     //   Optional<String> token = MyUtil.logInUser(user);
+        return user;
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "{id:\\d+}")
@@ -72,5 +86,7 @@ public class UserController {
     @ExceptionHandler(UserNotFoundException.class)
     public void handleUserNotFound() {
     }
+
+
 
 }

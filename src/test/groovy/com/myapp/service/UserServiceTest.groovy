@@ -28,7 +28,7 @@ class UserServiceTest extends BaseServiceTest {
     UserService userService
 
     def setup() {
-        userService = new UserServiceImpl(userRepository, userCustomRepository, relationshipRepository, securityContextService)
+        userService = new UserServiceImpl(userRepository, userCustomRepository, relationshipRepository, securityContextService, null)
     }
 
     def "can find a user when not signed in"() {

@@ -1,10 +1,12 @@
 package com.myapp.service;
 
 import com.myapp.Utils;
+import com.myapp.domain.Role;
 import com.myapp.domain.User;
 import com.myapp.dto.UserDTO;
 import com.myapp.dto.UserParams;
 import com.myapp.repository.RelationshipRepository;
+import com.myapp.repository.RoleRepository;
 import com.myapp.repository.UserCustomRepository;
 import com.myapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +35,19 @@ public class UserServiceImpl implements UserService, UserDetailsService, SocialU
     private final UserCustomRepository userCustomRepository;
     private final RelationshipRepository relationshipRepository;
     private final SecurityContextService securityContextService;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            UserCustomRepository userCustomRepository,
                            RelationshipRepository relationshipRepository,
-                           SecurityContextService securityContextService, PasswordEncoder passwordEncoder) {
+                           SecurityContextService securityContextService, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.userCustomRepository = userCustomRepository;
         this.relationshipRepository = relationshipRepository;
         this.securityContextService = securityContextService;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -61,6 +65,11 @@ public class UserServiceImpl implements UserService, UserDetailsService, SocialU
                     .filter(u -> u.equals(r.getUser()))
                     .map(User::getUsername)
                     .orElse(null);
+            final String role = currentUser.map(u->{
+                Role ur = u.getRole();
+                return ur.getRole();
+            })
+                    .orElse("ROLE_BUYER");
 
             return UserDTO.builder()
                     .id(r.getUser().getId())
@@ -69,6 +78,7 @@ public class UserServiceImpl implements UserService, UserDetailsService, SocialU
                     .name(r.getUser().getName())
                     .userStats(r.getUserStats())
                     .isFollowedByMe(isFollowedByMe)
+                    .role(role)
                     .build();
         });
     }
@@ -80,18 +90,30 @@ public class UserServiceImpl implements UserService, UserDetailsService, SocialU
 
     @Override
     public Page<UserDTO> findAll(PageRequest pageable) {
-        return userRepository.findAll(pageable).map(u -> UserDTO.builder()
-                .id(u.getId())
-                .name(u.getName())
-                .avatarHash(Utils.md5(u.getUsername()))
-                .email(u.getUsername())
-                .build()
+        return userRepository.findAll(pageable).map(u -> {
+          return  UserDTO.builder()
+                    .id(u.getId())
+                    .name(u.getName())
+                    .avatarHash(Utils.md5(u.getUsername()))
+                    .email(u.getUsername())
+                    .role(u.getRole().getRole())
+                    .build();
+                }
         );
     }
 
     @Override
     public User create(UserParams params) {
-        return userRepository.save(params.toUser());
+        User user = params.toUser();
+        attachRoleToUser(params.getRole(), user);
+        return userRepository.save(user);
+    }
+
+    private void attachRoleToUser(Optional<String> roleParam, User user) {
+        roleParam.ifPresent(
+                role ->
+                        roleRepository.findOneByRole(role).ifPresent(user::setRole)
+        );
     }
 
     @Override
@@ -99,6 +121,7 @@ public class UserServiceImpl implements UserService, UserDetailsService, SocialU
         params.getEmail().ifPresent(user::setUsername);
         params.getEncodedPassword().ifPresent(user::setPassword);
         params.getName().ifPresent(user::setName);
+        attachRoleToUser(params.getRole(), user);
         return userRepository.save(user);
     }
 
@@ -116,6 +139,7 @@ public class UserServiceImpl implements UserService, UserDetailsService, SocialU
         user.setUsername(signupForm.getEmail().get());
         user.setName(signupForm.getName().get());
         user.setPassword(signupForm.getEncodedPassword().get());
+        attachRoleToUser(signupForm.getRole(), user);
         userRepository.save(user);
         return user;
     }

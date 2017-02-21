@@ -28,7 +28,7 @@ class UserServiceTest extends BaseServiceTest {
     UserService userService
 
     def setup() {
-        userService = new UserServiceImpl(userRepository, userCustomRepository, relationshipRepository, securityContextService, null)
+        userService = new UserServiceImpl(userRepository, userCustomRepository, relationshipRepository, securityContextService, null, null)
     }
 
     def "can find a user when not signed in"() {
@@ -87,7 +87,7 @@ class UserServiceTest extends BaseServiceTest {
 
     def "can create a user"() {
         given:
-        UserParams params = new UserParams("test1@test.com", "secret", "test1")
+        UserParams params = new UserParams("test1@test.com", "secret", "test1", "ROLE_BUYER")
 
         when:
         User user = userService.create(params)
@@ -100,7 +100,7 @@ class UserServiceTest extends BaseServiceTest {
     def "can update a user"() {
         given:
         User user = userRepository.save(new User(username: "akira@test.com", password: "secret", name: "akira"))
-        UserParams params = new UserParams("test2@test.com", "secret2", "test2")
+        UserParams params = new UserParams("test2@test.com", "secret2", "test2", "ROLE_BUYER")
 
         when:
         userService.update(user, params)
@@ -110,7 +110,7 @@ class UserServiceTest extends BaseServiceTest {
         user.name == "test2"
 
         when:
-        params = new UserParams("test3@test.com", null, null)
+        params = new UserParams("test3@test.com", null, null, "ROLE_BUYER")
         userService.update(user, params)
 
         then:
@@ -121,7 +121,7 @@ class UserServiceTest extends BaseServiceTest {
     def "can update me"() {
         given:
         User user = userRepository.save(new User(username: "akira@test.com", password: "secret", name: "akira"))
-        UserParams params = new UserParams("test2@test.com", "secret2", "test2")
+        UserParams params = new UserParams("test2@test.com", "secret2", "test2", "ROLE_BUYER")
         signIn(user)
 
         when:

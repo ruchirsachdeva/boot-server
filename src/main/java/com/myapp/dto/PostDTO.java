@@ -3,6 +3,7 @@ package com.myapp.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.myapp.Utils;
 import com.myapp.domain.Micropost;
+import com.myapp.domain.Role;
 import com.myapp.domain.UserStats;
 import lombok.Builder;
 import lombok.NonNull;
@@ -24,12 +25,14 @@ public class PostDTO {
     private final Boolean isMyPost;
 
     public static PostDTO newInstance(Micropost post, UserStats userStats, Boolean isMyPost, Boolean isFollowedByMe) {
+        Role role = post.getUser().getRole();
         final UserDTO userDTO = UserDTO.builder()
                 .id(post.getUser().getId())
                 .name(post.getUser().getName())
                 .userStats(userStats)
                 .avatarHash(Utils.md5(post.getUser().getUsername()))
                 .isFollowedByMe(isFollowedByMe)
+                .role(role==null?null:role.getRole())
                 .build();
 
         return PostDTO.builder()

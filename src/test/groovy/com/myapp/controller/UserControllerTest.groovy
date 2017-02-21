@@ -50,7 +50,7 @@ class UserControllerTest extends BaseControllerTest {
         )
 
         then:
-        1 * userService.create(new UserParams(email, password, name))
+        1 * userService.create(new UserParams(email, password, name, "ROLE_BUYER"))
         response.andExpect(status().isOk())
     }
 
@@ -210,7 +210,7 @@ class UserControllerTest extends BaseControllerTest {
         String email = "test2@test.com"
         String password = "very secret"
         String name = "new name"
-        userService.updateMe(new UserParams(email, password, name)) >> {
+        userService.updateMe(new UserParams(email, password, name, "ROLE_BUYER")) >> {
             return new User(id: 1, username: email, password: password, name: name)
         }
 

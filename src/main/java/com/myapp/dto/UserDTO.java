@@ -17,5 +17,7 @@ public class UserDTO {
     private final String avatarHash;
     private final UserStats userStats;
     private final Boolean isFollowedByMe;
+    @NonNull
+    private final String role;
 
 }

@@ -1,9 +1,15 @@
+version: 0.2
+
 phases:
   build:
     commands:
      - echo Build started on `date`
      - mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true
      - echo Build ended on `date`
+  post_build:
+    commands:
+     - aws s3 cp target s3://${S3_BUCKET} --recursive --region ap-south-1
+     - echo Build completed on `date`
 
 artifacts:
   files:

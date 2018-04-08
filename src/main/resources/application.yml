@@ -28,7 +28,7 @@ spring:
   thymeleaf:
     cache: false
 flyway:
-  enabled: true
+  enabled: false
 ---
 spring:
   profiles: dev2
@@ -79,9 +79,11 @@ spring:
   profiles: prod
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    jdbcUrl: jdbc:mysql://${MYSQL_ENDPOINT}/ebdb?useSSL=false
-    username: micropostuser
-    password: ENC(eKw2P1jyrqKKs6KVg9Ql9iaJC8ve2kD8)
+    jdbcUrl: jdbc:mysql://${MYSQL_ENDPOINT}/beinghealer
+    #username: micropostuser
+    #password: ENC(eKw2P1jyrqKKs6KVg9Ql9iaJC8ve2kD8)
+    username: root
+    password: password
   jpa:
     database: MYSQL
     hibernate:
@@ -96,6 +98,16 @@ spring:
     facebook:
       app-id: 203064913467897
       app-secret: 559de0afd08faebfdd4b82fc9d54984d
+  mail:
+    host: smtpout.asia.secureserver.net
+    username: help@beinghealer.com
+    password: password1?
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
 
 #Twitter
 twitter:

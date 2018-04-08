@@ -86,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().cacheControl();
 
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/users").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/users/me").hasRole("USER")
                 .antMatchers(HttpMethod.PATCH, "/api/users/me").hasRole("USER")
                 .antMatchers(HttpMethod.GET, "/api/users/me/microposts").hasRole("USER")
@@ -111,7 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and().apply(new SpringSocialConfigurer());**/
 
-        http.addFilterBefore(statelessAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+       // http.addFilterBefore(statelessAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 /**
     @Bean

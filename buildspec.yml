@@ -1,6 +1,9 @@
 version: 0.2
 
 phases:
+  pre_build:
+    commands:
+     - echo maven version is `mvn -version`
   build:
     commands:
      - echo Build started on `date`
@@ -8,8 +11,9 @@ phases:
      - echo Build ended on `date`
   post_build:
     commands:
+     - echo Post-build started on `date`
      - aws s3 cp target s3://${S3_BUCKET} --recursive --region ap-south-1
-     - echo Build completed on `date`
+     - echo Post-build completed on `date`
 
 artifacts:
   files:

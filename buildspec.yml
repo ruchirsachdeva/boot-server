@@ -1,14 +1,10 @@
 phases:
   build:
     commands:
-      - mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true
-      - docker build --build-arg JASYPT_ENCRYPTOR_PASSWORD=secret -t IMAGE .
-      - docker run -p 8080:8080 \
-          -e "SPRING_PROFILES_ACTIVE=prod" \
-          -e "MYSQL_ENDPOINT=beinghealer.co1jbi0pcwxo.us-east-1.rds.amazonaws.com:3306" \
-          IMAGE
+     - echo Build started on `date`
+     - mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true
+     - echo Build ended on `date`
 
 artifacts:
   files:
-    - 'Dockerfile'
     - 'target/springboot-angular2-tutorial-0.1.0.jar'

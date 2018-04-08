@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.social.security.SocialUserDetails;
 
 import javax.persistence.*;
@@ -54,6 +52,15 @@ public class User implements SocialUserDetails {
     @JsonIgnore
     private List<Relationship> followedRelations;
 
+    @OneToOne(cascade={CascadeType.DETACH, CascadeType.REFRESH}, orphanRemoval=true)
+    @JoinTable(name="user_roles",
+            joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
+            inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
+    )
+    @Getter
+    @Setter
+    private Role role;
+
     @Override
     @JsonProperty("email")
     public String getUsername() {
@@ -74,7 +81,8 @@ public class User implements SocialUserDetails {
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(() -> "ROLE_USER");
+      //  return Collections.singleton(() -> "ROLE_USER");
+        return Collections.singleton(() -> role.getRole());
     }
 
     @Override

@@ -55,3 +55,18 @@ create table `UserConnection` (
 create unique index `UserConnectionRank` on `UserConnection`(`userId`, `providerId`, `rank`);
 create unique index `UserConnectionProviderUser` on `UserConnection`(`providerId`, `providerUserId`);
 
+CREATE TABLE `roles` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `role` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_role` (`role`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `user_roles` (
+  `user_id` BIGINT(20) NOT NULL,
+  `role_id` BIGINT(20) NOT NULL,
+  KEY `user` (`user_id`),
+  KEY `role` (`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO roles (role) VALUES ('ROLE_BUYER'), ('ROLE_PARTNER');

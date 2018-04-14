@@ -90,7 +90,7 @@ spring:
       ddl-auto: validate
 logging:
   config: classpath:logback-prod.xml
-app.jwt.secret: ENC(t0NojUi8WhsSCti12Qj8CgzzrBA1Wt0PC9R1N5KvRltEcegGhxSy1zEmI7OxqzOA)
+#app.jwt.secret: ENC(t0NojUi8WhsSCti12Qj8CgzzrBA1Wt0PC9R1N5KvRltEcegGhxSy1zEmI7OxqzOA)
 ---
 #Facebook
 spring:

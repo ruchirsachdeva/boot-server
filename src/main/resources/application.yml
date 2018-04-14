@@ -2,7 +2,7 @@ spring:
   main:
     banner-mode: 'OFF'
   profiles:
-    active: dev
+    active: prod
 security:
   basic:
     enabled: false
@@ -58,13 +58,13 @@ spring:
 flyway:
   enabled: false
 server:
-  port: 0
+  port: 5000
 ---
 spring:
   profiles: stg
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    jdbcUrl: jdbc:mysql://${MYSQL_ENDPOINT}/ebdb?useSSL=false
+    jdbcUrl: jdbc:mysql://beinghealer.cgohhja8vtye.ap-south-1.rds.amazonaws.com/ebdb?useSSL=false
     username: micropostuser
     password: ENC(jSxIbUwZQ5KgQJkOLGbYsZV83hH3oI0D)
   jpa:
@@ -79,7 +79,7 @@ spring:
   profiles: prod
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    jdbcUrl: jdbc:mysql://${MYSQL_ENDPOINT}/beinghealer
+    jdbcUrl: jdbc:mysql://beinghealer.cgohhja8vtye.ap-south-1.rds.amazonaws.com/beinghealer
     #username: micropostuser
     #password: ENC(eKw2P1jyrqKKs6KVg9Ql9iaJC8ve2kD8)
     username: root

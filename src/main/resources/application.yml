@@ -79,7 +79,7 @@ spring:
   profiles: prod
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    jdbcUrl: jdbc:mysql://beinghealer.cgohhja8vtye.ap-south-1.rds.amazonaws.com/beinghealer
+    jdbcUrl: jdbc:mysql://beinghealerdb.cgohhja8vtye.ap-south-1.rds.amazonaws.com/beinghealer
     #username: micropostuser
     #password: ENC(eKw2P1jyrqKKs6KVg9Ql9iaJC8ve2kD8)
     username: root
@@ -91,8 +91,7 @@ spring:
 logging:
   config: classpath:logback-prod.xml
 #app.jwt.secret: ENC(t0NojUi8WhsSCti12Qj8CgzzrBA1Wt0PC9R1N5KvRltEcegGhxSy1zEmI7OxqzOA)
-server:
-  port: 5000
+
 ---
 #Facebook
 spring:

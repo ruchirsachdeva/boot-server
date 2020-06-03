@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
 @RequestMapping("/api/users")
 public class UserMicropostController {
 
@@ -20,13 +20,13 @@ public class UserMicropostController {
         this.micropostService = micropostService;
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.GET, path = "/{userId:\\d+}/microposts")
     public List<PostDTO> list(@PathVariable("userId") Long userId, PageParams pageParams) {
         return micropostService.findByUser(userId, pageParams);
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.GET, path = "/me/microposts")
     public List<PostDTO> list(PageParams pageParams) {
         return micropostService.findMyPosts(pageParams);

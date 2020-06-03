@@ -39,7 +39,7 @@ public class SignUpController {
     }
 
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(value = "/signup", method = RequestMethod.GET)
     //THIS METHOD IS THE CALLBACK METHOD AFTER SIGNING IN Using facebook
     public AuthResponse signup(WebRequest request, RedirectAttributes redirectAttributes) {
@@ -62,7 +62,7 @@ public class SignUpController {
     }
 
     /**
-     * @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})@RequestMapping(value = "/signup", method = RequestMethod.GET)
+     * @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})@RequestMapping(value = "/signup", method = RequestMethod.GET)
      * public UserParams signup(WebRequest request, RedirectAttributes redirectAttributes) {
      * Connection<?> connection = providerSignInUtils.getConnectionFromSession(request);
      * return UserParams.fromConnection(connection);
@@ -76,7 +76,7 @@ public class SignUpController {
         private final String token;
     }
     /**
-     @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})@RequestMapping(value = "/signup", method = RequestMethod.POST)
+     @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})@RequestMapping(value = "/signup", method = RequestMethod.POST)
      public String signup(@ModelAttribute("signupForm") @Valid SignupForm signupForm,
      BindingResult result, WebRequest request, RedirectAttributes redirectAttributes) {
 

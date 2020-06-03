@@ -25,7 +25,7 @@ import java.util.Optional;
  * @author riccardo.causo
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -47,7 +47,7 @@ public class AuthController {
         this.securityContextService = securityContextService;
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.GET, path = "/facebook")
     // TODO : not in use, to be fixed in future when restricting only backend to connect to social and not
     // TODO: expect frontend to send accesstoken.
@@ -65,7 +65,7 @@ public class AuthController {
         //authenticationManager.authenticate(token);
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.POST, path = "/facebook")
     public AuthResponse authFacebook(@RequestBody FacebookAuthParams params) throws UserNotFoundException {
         Optional<User> user = socialUserService.authenticateSocialUser(params.getToken());
@@ -76,7 +76,7 @@ public class AuthController {
     }
 
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.POST)
     public AuthResponse auth(@RequestBody AuthParams params) throws AuthenticationException {
         final UsernamePasswordAuthenticationToken loginToken = params.toAuthenticationToken();

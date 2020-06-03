@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -40,7 +41,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.GET)
     public Page<UserDTO> list(@RequestParam(value = "page", required = false) @Nullable Integer page,
                               @RequestParam(value = "size", required = false) @Nullable Integer size) {
@@ -50,7 +51,7 @@ public class UserController {
         return userService.findAll(pageable);
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.POST)
     public User create(@Valid @RequestBody UserParams params, WebRequest request) {
         User user = userService.create(params);
@@ -62,24 +63,30 @@ public class UserController {
         return user;
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.GET, path = "{id:\\d+}")
     public UserDTO show(@PathVariable("id") Long id) throws UserNotFoundException {
         return userService.findOne(id)
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.GET, path = "/me")
     public UserDTO showMe() {
         return userService.findMe()
                 .orElseThrow(() -> new AccessDeniedException(""));
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.PATCH, path = "/me")
     public void updateMe(@Valid @RequestBody UserParams params) {
         userService.updateMe(params);
+    }
+
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
+    @RequestMapping(value = {"/"}, method = RequestMethod.OPTIONS)
+    public ResponseEntity authOption() {
+        return ResponseEntity.ok().build();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -15,7 +15,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import javax.inject.Inject;
 
 @Controller
-@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
 @RequestMapping("/user/connect/facebook")
 @SessionAttributes("redirectAfterConnecting")
 // TODO : not in use, to be fixed in future when restricting only backend to connect to social and not
@@ -29,7 +29,7 @@ public class FetchFacebookDataController {
         this.facebook = facebook;
     }
 
-    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.GET)
     public String helloFacebook(Model model, SessionStatus status) {
 

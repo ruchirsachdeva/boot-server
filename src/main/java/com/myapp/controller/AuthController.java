@@ -13,10 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -28,6 +25,7 @@ import java.util.Optional;
  * @author riccardo.causo
  */
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -49,23 +47,25 @@ public class AuthController {
         this.securityContextService = securityContextService;
     }
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
     @RequestMapping(method = RequestMethod.GET, path = "/facebook")
     // TODO : not in use, to be fixed in future when restricting only backend to connect to social and not
     // TODO: expect frontend to send accesstoken.
     // https://www.petrikainulainen.net/programming/spring-framework/adding-social-sign-in-to-a-spring-mvc-web-application-registration-and-login/
     public RedirectView authFacebook(HttpServletResponse response) throws AuthenticationException, IOException {
- //       response.sendRedirect("/auth/facebook?scope=" + MyControllerAdvice.FACEBOOK_SCOPE);
+        //       response.sendRedirect("/auth/facebook?scope=" + MyControllerAdvice.FACEBOOK_SCOPE);
 
         return new RedirectView("http://localhost:8080/auth/facebook?scope=" + MyControllerAdvice.FACEBOOK_SCOPE, false);
 
 
         //return "forward:/auth/facebook?scope=" + MyControllerAdvice.FACEBOOK_SCOPE;
-    //    ResponseEntity<String> responseEntity =
-      //        restTemplate.exchange("http://localhost:8080/auth/facebook?scope=" + MyControllerAdvice.FACEBOOK_SCOPE, HttpMethod.GET, null, String.class);
-      //  Authentication token = SocialAuthenticationToken();
+        //    ResponseEntity<String> responseEntity =
+        //        restTemplate.exchange("http://localhost:8080/auth/facebook?scope=" + MyControllerAdvice.FACEBOOK_SCOPE, HttpMethod.GET, null, String.class);
+        //  Authentication token = SocialAuthenticationToken();
         //authenticationManager.authenticate(token);
     }
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
     @RequestMapping(method = RequestMethod.POST, path = "/facebook")
     public AuthResponse authFacebook(@RequestBody FacebookAuthParams params) throws UserNotFoundException {
         Optional<User> user = socialUserService.authenticateSocialUser(params.getToken());
@@ -76,6 +76,7 @@ public class AuthController {
     }
 
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
     @RequestMapping(method = RequestMethod.POST)
     public AuthResponse auth(@RequestBody AuthParams params) throws AuthenticationException {
         final UsernamePasswordAuthenticationToken loginToken = params.toAuthenticationToken();
@@ -100,7 +101,7 @@ public class AuthController {
         }
 
         boolean hasToken() {
-            return token!=null;
+            return token != null;
         }
     }
 

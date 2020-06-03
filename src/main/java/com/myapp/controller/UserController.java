@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -39,6 +40,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
     @RequestMapping(method = RequestMethod.GET)
     public Page<UserDTO> list(@RequestParam(value = "page", required = false) @Nullable Integer page,
                               @RequestParam(value = "size", required = false) @Nullable Integer size) {
@@ -48,6 +50,7 @@ public class UserController {
         return userService.findAll(pageable);
     }
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
     @RequestMapping(method = RequestMethod.POST)
     public User create(@Valid @RequestBody UserParams params, WebRequest request) {
         User user = userService.create(params);
@@ -55,22 +58,25 @@ public class UserController {
 
         socialUserService.postUserSignUp(params.getToken());
 
-     //   Optional<String> token = MyUtil.logInUser(user);
+        //   Optional<String> token = MyUtil.logInUser(user);
         return user;
     }
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
     @RequestMapping(method = RequestMethod.GET, path = "{id:\\d+}")
     public UserDTO show(@PathVariable("id") Long id) throws UserNotFoundException {
         return userService.findOne(id)
                 .orElseThrow(UserNotFoundException::new);
     }
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
     @RequestMapping(method = RequestMethod.GET, path = "/me")
     public UserDTO showMe() {
         return userService.findMe()
                 .orElseThrow(() -> new AccessDeniedException(""));
     }
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com/"})
     @RequestMapping(method = RequestMethod.PATCH, path = "/me")
     public void updateMe(@Valid @RequestBody UserParams params) {
         userService.updateMe(params);
@@ -86,7 +92,6 @@ public class UserController {
     @ExceptionHandler(UserNotFoundException.class)
     public void handleUserNotFound() {
     }
-
 
 
 }

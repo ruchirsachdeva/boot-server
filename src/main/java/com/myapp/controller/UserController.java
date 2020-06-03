@@ -55,9 +55,9 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     public User create(@Valid @RequestBody UserParams params, WebRequest request) {
         User user = userService.create(params);
-        //providerSignInUtils.doPostSignUp(user.getUsername(), request);
+        providerSignInUtils.doPostSignUp(user.getUsername(), request);
 
-        socialUserService.postUserSignUp(params.getToken());
+      //  socialUserService.postUserSignUp(params.getToken());
 
         //   Optional<String> token = MyUtil.logInUser(user);
         return user;

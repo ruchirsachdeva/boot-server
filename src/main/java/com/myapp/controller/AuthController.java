@@ -9,15 +9,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author riccardo.causo
  */
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
 @RequestMapping("/api/auth")
 public class AuthController {
 
@@ -34,15 +32,17 @@ public class AuthController {
         this.securityContextService = securityContextService;
     }
 
+
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.POST)
-    public AuthResponse auth(@RequestBody AuthParams params) throws AuthenticationException {
+    public AuthParams.AuthResponse auth(@RequestBody AuthParams params) throws AuthenticationException {
         final UsernamePasswordAuthenticationToken loginToken = params.toAuthenticationToken();
         final Authentication authentication = authenticationManager.authenticate(loginToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return securityContextService.currentUser().map(u -> {
             final String token = tokenHandler.createTokenForUser(u);
-            return new AuthResponse(token);
+            return new AuthParams.AuthResponse(token);
         }).orElseThrow(RuntimeException::new); // it does not happen.
     }
 
@@ -54,11 +54,11 @@ public class AuthController {
         UsernamePasswordAuthenticationToken toAuthenticationToken() {
             return new UsernamePasswordAuthenticationToken(email, password);
         }
-    }
 
-    @Value
-    private static final class AuthResponse {
-        private final String token;
-    }
+        @Value
+        private static final class AuthResponse {
+            private final String token;
+        }
 
+    }
 }

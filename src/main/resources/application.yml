@@ -16,10 +16,14 @@ app.jwt.secret: qwerty
 spring:
   profiles: dev
   datasource:
-    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:h2:./db/dev;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password:
+    driverClassName: org.mariadb.jdbc.Driver
+    jdbcUrl: jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_54130520d23711e?reconnect=true
+    username: b3fe91c386325a
+    password: 2fabdf22
+    #url: jdbc:log4jdbc:h2:./db/dev;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE
+#    url: jdbc:mysql://localhost:3306/partyapp
+#    username: root
+#    password: root
   jpa:
     database: H2
     hibernate:
@@ -33,7 +37,7 @@ spring:
   profiles: dev2
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    jdbcUrl: jdbc:mysql://localhost:3306/springboot-angular2-tutorial?useSSL=false
+    jdbcUrl: jdbc:mysql://localhost:3306/partyapp?useSSL=false
     username: root
     password:
   jpa:
@@ -78,13 +82,26 @@ spring:
   profiles: prod
   datasource:
     driverClassName: org.mariadb.jdbc.Driver
-    jdbcUrl: jdbc:mysql://${MYSQL_ENDPOINT}/ebdb?useSSL=false
-    username: micropostuser
-    password: ENC(eKw2P1jyrqKKs6KVg9Ql9iaJC8ve2kD8)
+    jdbcUrl: jdbc:mysql://us-cdbr-east-05.cleardb.net/heroku_54130520d23711e?reconnect=true
+    username: b3fe91c386325a
+    password: 2fabdf22
+#    jdbcUrl: jdbc:mysql://beinghealerdb.cgohhja8vtye.ap-south-1.rds.amazonaws.com/beinghealer
+#    #username: micropostuser
+#    #password: ENC(eKw2P1jyrqKKs6KVg9Ql9iaJC8ve2kD8)
+#    username: root
+#    password: password
+
   jpa:
     database: MYSQL
     hibernate:
       ddl-auto: validate
 logging:
   config: classpath:logback-prod.xml
-app.jwt.secret: ENC(t0NojUi8WhsSCti12Qj8CgzzrBA1Wt0PC9R1N5KvRltEcegGhxSy1zEmI7OxqzOA)
+#app.jwt.secret: ENC(t0NojUi8WhsSCti12Qj8CgzzrBA1Wt0PC9R1N5KvRltEcegGhxSy1zEmI7OxqzOA)
+---
+rememberMe:
+  privateKey: some_secret_word
+---
+signup-success: Signup Successful
+server:
+  port: ${PORT:8080}

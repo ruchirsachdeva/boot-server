@@ -6,6 +6,7 @@ import com.myapp.service.MicropostService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/feed")
+@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})@RequestMapping("/api/feed")
 public class FeedController {
 
     @SuppressWarnings("UnusedDeclaration")
@@ -26,7 +27,7 @@ public class FeedController {
         this.micropostService = micropostService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})@RequestMapping(method = RequestMethod.GET)
     public List<PostDTO> feed(PageParams pageParams) {
         return micropostService.findAsFeed(pageParams);
     }

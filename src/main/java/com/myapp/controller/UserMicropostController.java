@@ -4,14 +4,12 @@ import com.myapp.dto.PageParams;
 import com.myapp.dto.PostDTO;
 import com.myapp.service.MicropostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
 @RequestMapping("/api/users")
 public class UserMicropostController {
 
@@ -22,11 +20,13 @@ public class UserMicropostController {
         this.micropostService = micropostService;
     }
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.GET, path = "/{userId:\\d+}/microposts")
     public List<PostDTO> list(@PathVariable("userId") Long userId, PageParams pageParams) {
         return micropostService.findByUser(userId, pageParams);
     }
 
+    @CrossOrigin(origins = {"http://localhost:4200", "https://party-client-app.herokuapp.com"})
     @RequestMapping(method = RequestMethod.GET, path = "/me/microposts")
     public List<PostDTO> list(PageParams pageParams) {
         return micropostService.findMyPosts(pageParams);
